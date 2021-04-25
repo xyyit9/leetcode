@@ -22,5 +22,3 @@ var findMin = function (nums) {
   }
   return nums[left];
 };
-
-console.log(findMin([3, 1, 2]));
