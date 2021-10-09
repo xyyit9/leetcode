@@ -3,46 +3,41 @@
  * @param {number} k
  * @return {number}
  */
-// 整个流程就是上浮下沉
-var findKthLargest = function (nums, k) {
-    let heapSize = nums.length
-    buildMaxHeap(nums, heapSize) // 构建好了一个大顶堆
-    // 进行下沉 大顶堆是最大元素下沉到末尾
-    for (let i = nums.length - 1; i >= nums.length - k + 1; i--) {
-        swap(nums, 0, i)
-        --heapSize // 下沉后的元素不参与到大顶堆的调整
-        // 重新调整大顶堆
-        maxHeapify(nums, 0, heapSize);
+ var findKthLargest = function (nums, k) {
+    let left = 0;
+    let right = nums.length - 1;
+    let target = nums.length - k;
+    // 求得当前数组中right位置的值，是数组中的第index大的元素
+    let index = parition(nums, left, right);
+    // 说明第index元素已经被放在正确的位置上了
+    while (index !== target) {
+      if (index < target) {
+        // 说明第target元素在index后面, 就缩小查找范围
+        left = index + 1;
+        index = parition(nums, left, right);
+      } else {
+        // 说明第target元素在index前面, 就缩小查找范围
+        right = index - 1;
+        index = parition(nums, left, right);
+      }
     }
-    return nums[0]
-    // 自下而上构建一颗大顶堆
-    function buildMaxHeap(nums, heapSize) {
-        for (let i = Math.floor(heapSize / 2) - 1; i >= 0; i--) {
-            maxHeapify(nums, i, heapSize)
-        }
+    return nums[index];
+  };
+  
+  function parition(arr, left, right) {
+    // index相当于一个临界点，左边的值都比index小，右边的值都比index大
+    let index = left - 1;
+    // 以right为比较值
+    for (let i = left; i < right; i++) {
+      // 如果比right小，就把index和i的位置互换
+      if (arr[i] < arr[right]) {
+        index++;
+        [arr[i], arr[index]] = [arr[index], arr[i]];
+      }
     }
-    // 从左向右，自上而下的调整节点
-    function maxHeapify(nums, i, heapSize) {
-        let l = i * 2 + 1
-        let r = i * 2 + 2
-        let largest = i
-        if (l < heapSize && nums[l] > nums[largest]) {
-            largest = l
-        }
-        if (r < heapSize && nums[r] > nums[largest]) {
-            largest = r
-        }
-        if (largest !== i) {
-            swap(nums, i, largest) // 进行节点调整
-            // 继续调整下面的非叶子节点
-            maxHeapify(nums, largest, heapSize)
-        }
-    }
-    function swap(a, i, j) {
-        let temp = a[i];
-        a[i] = a[j];
-        a[j] = temp;
-    }
-};
-
-findKthLargest([4,6,8,5,9], 2)
+    index++;
+    // 最后需要把index和right的位置互换
+    [arr[right], arr[index]] = [arr[index], arr[right]];
+    return index;
+  }
+  

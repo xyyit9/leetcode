@@ -1,7 +1,24 @@
-## 反转
+## 反转链表
+```js
+// 翻转链表，输入头结点和尾节点
+function traverse(head, tail) {
+    let pre = tail.next
+    let cur = head
+    // 当pre等于tail时，说明翻转完毕
+    while (pre !== tail) {
+        const next = cur.next
+        cur.next = pre
+        pre = cur
+        cur = next
+    }
+    // 返回翻转后的，头节点和尾节点
+    return [tail, head]
+}
+```
 * 206 反转链表
 * 92 反转链表 进阶，在指定的链表位置进行反转
 * 24 两两交换链表中的节点
+* 25 K 个一组翻转链表
 
 ## 快慢指针
 即对链表中第N个节点进行操作
