@@ -20,10 +20,12 @@ var findPeakElement = function (nums) {
         }
         /**
          *
+         * 153题中是如下这样做，跳出循环的，但是在本题中却不行，只能将while条件改成left<right来做
+          因为此时mid==right==left, 意味着已经找到峰值，需要跳出循环，
+          但因为mid是峰值，所以会进入该条件nums[mid]>nums[mid+1]，并不会进入到这个条件中来
         else if (nums[mid] == nums[right]) {
-          此时mid==right==left, 需要跳出循环，本质只需要把条件改成left<right，153题可以这样做，
-          但这边是永远无法进入该判断的，因此只能改成left<right
           break; 
+
         } */
     }
     return left;
